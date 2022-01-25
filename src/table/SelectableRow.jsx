@@ -1,23 +1,34 @@
+import { useEffect } from "react";
 import BodyCell from "./BodyCell";
 import CheckBox from "./CheckBox";
-import Row from "./Row";
 import { useToggle } from "./hooks";
-import { useEffect } from "react";
+import Row from "./Row";
 
-export const BaseSelectableRow = ({ 
-  checkBoxProps, 
-  bodyCellProps, 
-  children, 
-  checked,
+export const SelectableRow = ({
+  checkBoxProps,
+  bodyCellProps,
+  children,
+  selected,
   onChange,
-  ...props  
+  ...props
 }) => {
+  const { isToggled, toggle, setToggle } = useToggle();
+
+  useEffect(() => {
+    setToggle(selected);
+  }, [selected, setToggle]);
+
+  const handleChange = () => {
+    toggle();
+    onChange(isToggled);
+  };
+
   return (
     <Row {...props}>
       <BodyCell {...bodyCellProps}>
-        <CheckBox 
-          checked={checked}
-          onChange={onChange}
+        <CheckBox
+          checked={isToggled}
+          onChange={handleChange}
           {...checkBoxProps}
         />
       </BodyCell>
@@ -25,23 +36,3 @@ export const BaseSelectableRow = ({
     </Row>
   );
 };
-
-const SelectableRow = ({
-  children,
-  selectAll,
-  ...props
-}) => {
-  const {
-    isToggled,
-    toggle,
-    setToggle,
-  } = useToggle();
-  useEffect(() => {
-    setToggle(selectAll);
-  }, [selectAll]);
-  
-  return <BaseSelectableRow {...props} checked={isToggled} onChange={toggle} >{children(isToggled)}</BaseSelectableRow>;
-};
-
-
-export default SelectableRow;

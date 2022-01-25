@@ -4,7 +4,7 @@ import BodyCell from "./table/BodyCell";
 import Header from "./table/Header";
 import HeaderCell from "./table/HeaderCell";
 import { useToggle } from "./table/hooks";
-import SelectableRow, { BaseSelectableRow } from "./table/SelectableRow";
+import { SelectableRow } from "./table/SelectableRow";
 import Table from "./table/Table";
 
 const people = [
@@ -19,53 +19,43 @@ const people = [
   {
     firstName: "Baz",
     lastName: "Bob",
-  }
+  },
 ];
 
 const headers = ["First Name", "Last Name"];
 
 const App = () => {
-  const selectedValues = useRef({});;
-  const { 
-    isToggled: allValuesSelected, 
-    toggle 
-  } = useToggle();
-  
+  const selectedValues = useRef({});
+  const { isToggled: allValuesSelected, toggle: toggleAll } = useToggle();
+
+  const toggleSingle = (selected, { firstName, lastName }) => {
+    const key = `${firstName}${lastName}`;
+    selectedValues.current = {
+      ...selectedValues.current,
+      [key]: allValuesSelected || selected,
+    };
+  };
+
   return (
     <>
       <Table>
         <Header>
-          <BaseSelectableRow onChange={toggle} checked={allValuesSelected} >
-            {
-              headers.map((header, index) => {
-                return <HeaderCell key={index}>{header}</HeaderCell>;
-              })   
-            }
-          </BaseSelectableRow>
+          <SelectableRow onChange={toggleAll} selected={allValuesSelected}>
+            {headers.map((header, index) => {
+              return <HeaderCell key={index}>{header}</HeaderCell>;
+            })}
+          </SelectableRow>
         </Header>
         <Body>
-          {people.map(({
-            firstName,
-            lastName,
-          }, index) => {
+          {people.map((person, index) => {
             return (
               <SelectableRow
                 key={index}
-                selectAll={allValuesSelected}
+                selected={allValuesSelected}
+                onChange={(selected) => toggleSingle(selected, person)}
               >
-                {(selected) => {
-                  const key = `${firstName}${lastName}${index}`;
-                  selectedValues.current = {
-                    ...selectedValues.current,
-                    [key]: allValuesSelected || selected,
-                  };
-                  return (
-                    <>
-                      <BodyCell>{firstName}</BodyCell>
-                      <BodyCell>{lastName}</BodyCell>
-                    </>
-                    );
-                }}
+                <BodyCell>{person.firstName}</BodyCell>
+                <BodyCell>{person.lastName}</BodyCell>
               </SelectableRow>
             );
           })}

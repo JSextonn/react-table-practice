@@ -1,4 +1,4 @@
-const Header = ({ children, ...props}) => {
+const Header = ({ children, ...props }) => {
   return <thead {...props}>{children}</thead>;
 };
 

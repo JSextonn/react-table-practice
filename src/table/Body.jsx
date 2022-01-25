@@ -1,4 +1,4 @@
-const Body = ({ children, ...props}) => {
+const Body = ({ children, ...props }) => {
   return <tbody {...props}>{children}</tbody>;
 };
 

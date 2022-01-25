@@ -26,9 +26,5 @@ export const usePagination = (items, pageSize, initPage = 0) => {
 
   const pageCount = Math.round(items.length / pageSize);
 
-  const pageAwareIndex = (index) => {
-      return page * 2 + index;
-  };
-
-  return { paginatedItems, page, setPage, pageCount, pageAwareIndex };
+  return { paginatedItems, page, setPage, pageCount };
 };
