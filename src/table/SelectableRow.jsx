@@ -20,7 +20,7 @@ export const SelectableRow = ({
 
   const handleChange = () => {
     toggle();
-    onChange(isToggled);
+    onChange(!isToggled);
   };
 
   return (
