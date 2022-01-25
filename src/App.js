@@ -12,21 +12,13 @@ const people = [
     lastName: "Sexton",
   },
   {
-    firstName: "Shawn",
-    lastName: "Sexton",
+    firstName: "Foo",
+    lastName: "Bar",
   },
   {
-    firstName: "Jeff",
-    lastName: "Sexton",
-  },
-  {
-    firstName: "Jack",
-    lastName: "Sexton",
-  },
-  {
-    firstName: "Sandra",
-    lastName: "Sexton",
-  },
+    firstName: "Baz",
+    lastName: "Bob",
+  }
 ];
 
 const headers = ["First Name", "Last Name"];

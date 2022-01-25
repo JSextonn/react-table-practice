@@ -49,13 +49,7 @@ export const usePagination = (items, pageSize, initPage = 0) => {
   const pageCount = Math.round(items.length / pageSize);
 
   const pageAwareIndex = (index) => {
-    if (page === 0) {
-      return index;
-    } else if (page === 1) {
-      return index + 2;
-    } else {
       return page * 2 + index;
-    }
   };
 
   return { paginatedItems, page, setPage, pageCount, pageAwareIndex };
