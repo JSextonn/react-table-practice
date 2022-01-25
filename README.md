@@ -3,6 +3,21 @@
 ## Simple Example
 
 ```jsx
+const people = [
+  {
+    firstName: "Justin",
+    lastName: "Sexton",
+  },
+  {
+    firstName: "Foo",
+    lastName: "Bar",
+  },
+  {
+    firstName: "Baz",
+    lastName: "Bob",
+  },
+];
+
 const headers = ["First Name", "Last Name"];
 
 const App = () => {
@@ -35,18 +50,40 @@ const App = () => {
 ## Example With Checkbox Selection
 
 ```jsx
+const people = [
+  {
+    firstName: "Justin",
+    lastName: "Sexton",
+  },
+  {
+    firstName: "Foo",
+    lastName: "Bar",
+  },
+  {
+    firstName: "Baz",
+    lastName: "Bob",
+  },
+];
+
 const headers = ["First Name", "Last Name"];
 
 const App = () => {
-  const { selected, handleSelectOne, handleSelectAll } = useRowSelection(
-    people.length
-  );
+  const selectedValues = useRef({});
+  const { isToggled: allValuesSelected, toggle: toggleAll } = useToggle();
+
+  const toggleSingle = (selected, { firstName, lastName }) => {
+    const key = `${firstName}${lastName}`;
+    selectedValues.current = {
+      ...selectedValues.current,
+      [key]: allValuesSelected || selected,
+    };
+  };
 
   return (
     <>
       <Table>
         <Header>
-          <SelectableRow onChange={handleSelectAll}>
+          <SelectableRow onChange={toggleAll} selected={allValuesSelected}>
             {headers.map((header, index) => {
               return <HeaderCell key={index}>{header}</HeaderCell>;
             })}
@@ -54,12 +91,11 @@ const App = () => {
         </Header>
         <Body>
           {people.map((person, index) => {
-            const isSelected = selected[index];
             return (
               <SelectableRow
                 key={index}
-                selected={isSelected}
-                onChange={(e) => handleSelectOne(e, index)}
+                selected={allValuesSelected}
+                onChange={(selected) => toggleSingle(selected, person)}
               >
                 <BodyCell>{person.firstName}</BodyCell>
                 <BodyCell>{person.lastName}</BodyCell>
@@ -68,65 +104,6 @@ const App = () => {
           })}
         </Body>
       </Table>
-    </>
-  );
-};
-```
-
-## Example With Pagination and Checkbox Selection
-
-```jsx
-const headers = ["First Name", "Last Name"];
-
-const App = () => {
-  const pageSize = 2;
-  const { paginatedItems, page, setPage, pageCount, pageAwareIndex } =
-    usePagination(people, pageSize);
-  const { selected, handleSelectOne, handleSelectAll } = useRowSelection(
-    people.length
-  );
-
-  const handleNextPage = () => {
-    if (page + 1 < pageCount) {
-      setPage(page + 1);
-    }
-  };
-
-  const handlePrevPage = () => {
-    if (page - 1 >= 0) {
-      setPage(page - 1);
-    }
-  };
-
-  return (
-    <>
-      <Table>
-        <Header>
-          <SelectableRow onChange={handleSelectAll}>
-            {headers.map((header, index) => {
-              return <HeaderCell key={index}>{header}</HeaderCell>;
-            })}
-          </SelectableRow>
-        </Header>
-        <Body>
-          {paginatedItems.map((person, index) => {
-            const paginatedIndex = pageAwareIndex(index);
-            const isSelected = selected[paginatedIndex];
-            return (
-              <SelectableRow
-                key={index}
-                selected={isSelected}
-                onChange={(e) => handleSelectOne(e, paginatedIndex)}
-              >
-                <BodyCell>{person.firstName}</BodyCell>
-                <BodyCell>{person.lastName}</BodyCell>
-              </SelectableRow>
-            );
-          })}
-        </Body>
-      </Table>
-      <button onClick={handlePrevPage}>Previous</button>
-      <button onClick={handleNextPage}>Next</button>
     </>
   );
 };
