@@ -13,29 +13,13 @@ const people = [
     lastName: "Sexton",
   },
   {
-    firstName: "Justin",
-    lastName: "Sexton",
+    firstName: "Foo",
+    lastName: "Bar",
   },
   {
-    firstName: "Justin",
-    lastName: "Sexton",
-  },
-  {
-    firstName: "Justin",
-    lastName: "Sexton",
-  },
-  {
-    firstName: "Justin",
-    lastName: "Sexton",
-  },
-  {
-    firstName: "Justin",
-    lastName: "Sexton",
-  },
-  {
-    firstName: "Justin",
-    lastName: "Sexton",
-  },
+    firstName: "Baz",
+    lastName: "Bob",
+  }
 ];
 
 const headers = ["First Name", "Last Name"];
@@ -46,7 +30,7 @@ const App = () => {
     isToggled: allValuesSelected, 
     toggle 
   } = useToggle();
-
+  
   return (
     <>
       <Table>
