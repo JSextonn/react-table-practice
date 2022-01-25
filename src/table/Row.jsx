@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
-const Row = ({ children }) => {
-  return <tr>{children}</tr>;
+const Row = ({ children, ...props }) => {
+  return <tr {...props}>{children}</tr>;
 };
 
 Row.propTypes = {

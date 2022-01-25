@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
-const BodyCell = ({ children }) => {
-  return <td>{children}</td>;
+const BodyCell = ({ children, ...props }) => {
+  return <td {...props}>{children}</td>;
 };
 
 BodyCell.propTypes = {

@@ -1,5 +1,5 @@
-const Footer = ({ children }) => {
-  return <tfoot>{children}</tfoot>;
+const Footer = ({ children, ...props }) => {
+  return <tfoot {...props}>{children}</tfoot>;
 };
 
 export default Footer;
