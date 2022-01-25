@@ -31,3 +31,32 @@ const getInitializedState = (init) => {
     );
   }
 };
+
+export const usePagination = (items, pageSize, initPage = 0) => {
+  if (pageSize < 1) {
+    throw new Error("usePagination pageSize must be a positive integer");
+  }
+  if (initPage < 0) {
+    throw new Error("usePagination initPage must be a non negative integer");
+  }
+
+  const [page, setPage] = useState(initPage);
+
+  const start = page * pageSize;
+  const end = start + pageSize;
+  const paginatedItems = items.slice(start, end);
+
+  const pageCount = Math.round(items.length / pageSize);
+
+  const pageAwareIndex = (index) => {
+    if (page === 0) {
+      return index;
+    } else if (page === 1) {
+      return index + 2;
+    } else {
+      return page * 2 + index;
+    }
+  };
+
+  return { paginatedItems, page, setPage, pageCount, pageAwareIndex };
+};

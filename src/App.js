@@ -2,7 +2,7 @@ import Body from "./table/Body";
 import BodyCell from "./table/BodyCell";
 import Header from "./table/Header";
 import HeaderCell from "./table/HeaderCell";
-import { useRowSelection } from "./table/hooks";
+import { usePagination, useRowSelection } from "./table/hooks";
 import SelectableRow from "./table/SelectableRow";
 import Table from "./table/Table";
 
@@ -12,27 +12,19 @@ const people = [
     lastName: "Sexton",
   },
   {
-    firstName: "Justin",
+    firstName: "Shawn",
     lastName: "Sexton",
   },
   {
-    firstName: "Justin",
+    firstName: "Jeff",
     lastName: "Sexton",
   },
   {
-    firstName: "Justin",
+    firstName: "Jack",
     lastName: "Sexton",
   },
   {
-    firstName: "Justin",
-    lastName: "Sexton",
-  },
-  {
-    firstName: "Justin",
-    lastName: "Sexton",
-  },
-  {
-    firstName: "Justin",
+    firstName: "Sandra",
     lastName: "Sexton",
   },
 ];
@@ -40,9 +32,24 @@ const people = [
 const headers = ["First Name", "Last Name"];
 
 const App = () => {
+  const pageSize = 2;
+  const { paginatedItems, page, setPage, pageCount, pageAwareIndex } =
+    usePagination(people, pageSize);
   const { selected, handleSelectOne, handleSelectAll } = useRowSelection(
     people.length
   );
+
+  const handleNextPage = () => {
+    if (page + 1 < pageCount) {
+      setPage(page + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page - 1 >= 0) {
+      setPage(page - 1);
+    }
+  };
 
   return (
     <>
@@ -55,13 +62,14 @@ const App = () => {
           </SelectableRow>
         </Header>
         <Body>
-          {people.map((person, index) => {
-            const isSelected = selected[index];
+          {paginatedItems.map((person, index) => {
+            const newIndex = pageAwareIndex(index);
+            const isSelected = selected[newIndex];
             return (
               <SelectableRow
                 key={index}
                 selected={isSelected}
-                onChange={(e) => handleSelectOne(e, index)}
+                onChange={(e) => handleSelectOne(e, newIndex)}
               >
                 <BodyCell>{person.firstName}</BodyCell>
                 <BodyCell>{person.lastName}</BodyCell>
@@ -70,6 +78,8 @@ const App = () => {
           })}
         </Body>
       </Table>
+      <button onClick={handlePrevPage}>Previous</button>
+      <button onClick={handleNextPage}>Next</button>
     </>
   );
 };
