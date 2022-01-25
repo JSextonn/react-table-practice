@@ -110,13 +110,13 @@ const App = () => {
         </Header>
         <Body>
           {paginatedItems.map((person, index) => {
-            const newIndex = pageAwareIndex(index);
-            const isSelected = selected[newIndex];
+            const paginatedIndex = pageAwareIndex(index);
+            const isSelected = selected[paginatedIndex];
             return (
               <SelectableRow
                 key={index}
                 selected={isSelected}
-                onChange={(e) => handleSelectOne(e, newIndex)}
+                onChange={(e) => handleSelectOne(e, paginatedIndex)}
               >
                 <BodyCell>{person.firstName}</BodyCell>
                 <BodyCell>{person.lastName}</BodyCell>
