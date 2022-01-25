@@ -1,9 +1,10 @@
+import { useRef } from "react";
 import Body from "./table/Body";
 import BodyCell from "./table/BodyCell";
 import Header from "./table/Header";
 import HeaderCell from "./table/HeaderCell";
-import { useRowSelection } from "./table/hooks";
-import SelectableRow from "./table/SelectableRow";
+import { useToggle } from "./table/hooks";
+import SelectableRow, { BaseSelectableRow } from "./table/SelectableRow";
 import Table from "./table/Table";
 
 const people = [
@@ -40,31 +41,47 @@ const people = [
 const headers = ["First Name", "Last Name"];
 
 const App = () => {
-  const { selected, handleSelectOne, handleSelectAll } = useRowSelection(
-    people.length
-  );
+  const selectedValues = useRef({});;
+  const { 
+    isToggled: allValuesSelected, 
+    toggle 
+  } = useToggle();
 
   return (
     <>
       <Table>
         <Header>
-          <SelectableRow onChange={handleSelectAll}>
-            {headers.map((header, index) => {
-              return <HeaderCell key={index}>{header}</HeaderCell>;
-            })}
-          </SelectableRow>
+          <BaseSelectableRow onChange={toggle} checked={allValuesSelected} >
+            {
+              headers.map((header, index) => {
+                return <HeaderCell key={index}>{header}</HeaderCell>;
+              })   
+            }
+          </BaseSelectableRow>
         </Header>
         <Body>
-          {people.map((person, index) => {
-            const isSelected = selected[index];
+          {people.map(({
+            firstName,
+            lastName,
+          }, index) => {
             return (
               <SelectableRow
                 key={index}
-                selected={isSelected}
-                onChange={(e) => handleSelectOne(e, index)}
+                selectAll={allValuesSelected}
               >
-                <BodyCell>{person.firstName}</BodyCell>
-                <BodyCell>{person.lastName}</BodyCell>
+                {(selected) => {
+                  const key = `${firstName}${lastName}${index}`;
+                  selectedValues.current = {
+                    ...selectedValues.current,
+                    [key]: allValuesSelected || selected,
+                  };
+                  return (
+                    <>
+                      <BodyCell>{firstName}</BodyCell>
+                      <BodyCell>{lastName}</BodyCell>
+                    </>
+                    );
+                }}
               </SelectableRow>
             );
           })}
